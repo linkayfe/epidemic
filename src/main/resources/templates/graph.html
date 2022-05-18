@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="#{list.title}">新冠疫情动态</title>
+    <link rel="stylesheet" href="bootstrap.css">
+    <script type="text/javascript" src="echarts/echarts.min.js"></script>
+    <script type="text/javascript" src="echarts/china.js"></script>
+</head>
+<body class="container">
+<div class="text-center">
+    <h2 class="text-center">国内疫情情况</h2>
+</div>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th th:text="#{list.table.thead1}">地区</th>
+            <th th:text="#{list.table.thead2}">新增</th>
+            <th th:text="#{list.table.thead3}">现有</th>
+            <th th:text="#{list.table.thead4}">累计</th>
+            <th th:text="#{list.table.thead5}">治愈</th>
+            <th th:text="#{list.table.thead6}">死亡</th>
+            <th th:text="#{list.table.thead7}">更新时间</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="bean:${list}">
+            <td th:text="${bean.areaName}">name</td>
+            <td th:text="${bean.confirmAdd}">confirmAdd</td>
+            <td th:text="${bean.nowConfirm}">nowConfirm</td>
+            <td th:text="${bean.confirm}">confirm</td>
+            <td th:text="${bean.heal}">heal</td>
+            <td th:text="${bean.dead}">dead</td>
+            <td th:text="${bean.updateTime}">updateTime</td>
+            <td><a th:href='@{/city/}+${bean.areaName}' target="_blank">查看详情--></a></td>
+        </tr>
+    </tbody>
+</table>
+<div id="main" style="width: 600px;height: 400px"></div>
+<script th:inline="javascript">
+    var myChart = echarts.init(document.getElementById('main'));
+
+    var dateStr = [[${dateList}]];
+    var confirmStr = [[${confirmList}]];
+    var healStr = [[${healList}]];
+    var deadStr = [[${deadList}]];
+
+    option = {
+        //提示框
+        tooltip: {
+            trigger: 'axis'
+        },
+        title: {
+            text: '国内疫情累计确诊/治愈/死亡趋势'
+        },
+        legend: {
+            top: '6%',
+            data: ['累计确诊', '累计治愈', '累计死亡']
+        },
+        xAxis: {
+            data: JSON.parse(dateStr)
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [
+            {
+                name: '累计确诊',
+                type: 'line',
+                data: JSON.parse(confirmStr)
+            },
+            {
+                name: '累计治愈',
+                type: 'line',
+                data: JSON.parse(healStr)
+            },
+            {
+                name: '累计死亡',
+                type: 'line',
+                data: JSON.parse(deadStr)
+            }
+        ]
+    };
+    myChart.setOption(option);
+</script>
+
+<div id="chinaMap" style="width: 1000px;height: 800px"></div>
+<script th:inline="javascript">
+    var chinaMapChart = echarts.init(document.getElementById('chinaMap'));
+
+    var dataStr1 = [[${chinaMap}]];
+    var dataStr2 = [[${nowChinaMap}]];
+
+    mapOption = {
+        title: {
+            text: '中国疫情地图'
+        },
+        //提示框
+        tooltip: {
+            trigger: 'item'
+        },
+        legend:{
+            left: 'left',
+            top: '6%',
+            data: ['累计确诊','现有确诊'],
+            selected:{
+                '累计确诊':false,
+                '现有确诊':true
+            }
+        },
+        //根据数值范围渲染颜色的组件
+        visualMap: {
+            type: 'piecewise',
+            pieces: [
+                {min:1000,max:100000000,label:'1000人以上',color:'#ff2736'},
+                {min:500,max:999,label:'500-999人',color:'#ff6341'},
+                {min:100,max:499,label:'100-499人',color:'#ffa577'},
+                {min:10,max:99,label:'10-99人',color:'#ffcea0'},
+                {min:1,max:9,label:'1-9人',color:'#e2ebf4'},
+                {min:0,max:0,label:'0人',color:'rgb(255, 255, 255)'}
+            ],
+            calculable:true
+        },
+        //右侧的展示数据，保存图片等工具
+        toolbox:{
+            show:true,
+            orient:'vertical',
+            left:'right',
+            top:'center',
+            feature:{
+                mark:{show:true},
+                dataView:{show:true,readOnly:false},
+                restore:{show:true},
+                saveAsImage:{show:true}
+            }
+        },
+        series:[
+            {
+                name:'现有确诊',
+                type:'map',
+                mapType:'china',
+                roam:false,
+                label:{
+                    normal:{
+                        show:true,
+                        position:'center',
+                        textStyle:{
+                            color:'#000'
+                        }
+                    },
+                    emphasis:{
+                        show:true
+                    }
+                },
+                showLegendSymbol: false,
+                data:JSON.parse(dataStr2)
+            },
+            {
+                name:'累计确诊',
+                type:'map',
+                mapType:'china',
+                roam:false,
+                label:{
+                    normal:{
+                        show:true,
+                        position:'center',
+                        textStyle:{
+                            color:'#000'
+                        }
+                    },
+                    emphasis:{
+                        show:false
+                    }
+                },
+                showLegendSymbol: false,
+                data:JSON.parse(dataStr1)
+            }
+        ]
+
+    }
+    chinaMapChart.on('legendselectchanged', function (params) {
+        let option = this.getOption();
+        let select_key = Object.keys(params.selected);
+        let flag = true;
+        if (!params.selected[params.name]) {
+            option.legend[0].selected[params.name] = true;
+        } else {
+            select_key.map(res => {
+                option.legend[0].selected[res] = false;
+            });
+            if (flag) option.legend[0].selected[params.name] = true;
+        }
+        this.setOption(option)
+    });
+    chinaMapChart.on('click', function (params) {
+        window.open('/city/'+params.data.name)
+    })
+    chinaMapChart.setOption(mapOption);
+</script>
+</body>
+</html>

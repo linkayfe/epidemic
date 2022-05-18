@@ -1,0 +1,9 @@
+## Epidemic
+
+这是一个实时查看国内疫情信息的项目，包含了各省份以及各市的疫情信息，最近的疫情趋势，疫情地图
+
+数据的来由是通过腾讯实时疫情网站的请求返回的数据，加以处理再展示
+
+CreateTableSQLaboutEpidemic.sql是此项目的建库建表语句
+
+本项目只是一个练手学习的Java项目，主要使用的框架有SpringBoot,Spring,SpringMVC,Mybatis-plus，前后端交互连接使用的是Thymeleaf，前端使用了BootStrap以及echarts

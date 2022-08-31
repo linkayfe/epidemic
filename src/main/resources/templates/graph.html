@@ -9,7 +9,7 @@
 </head>
 <body class="container">
 <div class="text-center">
-    <h2 class="text-center">国内疫情情况</h2>
+    <h2 class="text-center" th:text="#{epidemic.china}">国内疫情情况</h2>
 </div>
 <table class="table table-hover">
     <thead>
@@ -44,6 +44,10 @@
     var confirmStr = [[${confirmList}]];
     var healStr = [[${healList}]];
     var deadStr = [[${deadList}]];
+    var confirm = [[#{map.confirm}]];
+    var heal = [[#{line.heal}]];
+    var dead = [[#{line.dead}]];
+    var lineTitle = [[#{line.chinaLineTitle}]]
 
     option = {
         //提示框
@@ -51,11 +55,11 @@
             trigger: 'axis'
         },
         title: {
-            text: '国内疫情累计确诊/治愈/死亡趋势'
+            text: lineTitle
         },
         legend: {
             top: '6%',
-            data: ['累计确诊', '累计治愈', '累计死亡']
+            data: [confirm,heal, dead]
         },
         xAxis: {
             data: JSON.parse(dateStr)
@@ -65,17 +69,17 @@
         },
         series: [
             {
-                name: '累计确诊',
+                name: confirm,
                 type: 'line',
                 data: JSON.parse(confirmStr)
             },
             {
-                name: '累计治愈',
+                name: heal,
                 type: 'line',
                 data: JSON.parse(healStr)
             },
             {
-                name: '累计死亡',
+                name: dead,
                 type: 'line',
                 data: JSON.parse(deadStr)
             }
@@ -90,10 +94,13 @@
 
     var dataStr1 = [[${chinaMap}]];
     var dataStr2 = [[${nowChinaMap}]];
+    var mapTitle = [[#{map.title}]];
+    var mapConfirm = [[#{map.confirm}]];
+    var mapNowConfirm = [[#{map.nowConfirm}]];
 
     mapOption = {
         title: {
-            text: '中国疫情地图'
+            text: mapTitle
         },
         //提示框
         tooltip: {

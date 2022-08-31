@@ -2,14 +2,14 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>省份疫情情况</title>
+    <title th:text="#{province.title}">省份疫情情况</title>
     <link rel="stylesheet" th:href="@{/bootstrap.css}">
     <script type="text/javascript" th:src="@{/echarts/echarts.min.js}"></script>
     <script type="text/javascript" th:src="@{/echarts/china.js}"></script>
 </head>
 <body class="container">
 <div class="text-center">
-    <h2 class="text-center" th:text="${title}">省内疫情情况</h2>
+    <h2 class="text-center" th:text="#{province.title}">省内疫情情况</h2>
 </div>
 <table class="table table-hover">
     <thead>
@@ -43,18 +43,23 @@
     var confirmStr = [[${confirmList}]];
     var healStr = [[${healList}]];
     var deadStr = [[${deadList}]];
-    var confirmAddStr = [[${confirmAddList}]]
+    var confirmAddStr = [[${confirmAddList}]];
+    var confirm = [[#{map.confirm}]];
+    var heal = [[#{line.heal}]];
+    var dead = [[#{line.dead}]];
+    var addConfirm = [[#{line.addConfirm}]]
+    var lineTitle = [[#{line.provinceTitle}]]
     option = {
         //提示框
         tooltip: {
             trigger: 'axis'
         },
         title: {
-            text: '省内疫情累计确诊/治愈/死亡趋势'
+            text: lineTitle
         },
         legend: {
             top: '6%',
-            data: ['累计确诊', '累计治愈', '累计死亡','新增趋势']
+            data: [confirm, heal, dead,addConfirm]
         },
         xAxis: {
             data: JSON.parse(dateStr)
@@ -64,22 +69,22 @@
         },
         series: [
             {
-                name: '累计确诊',
+                name: confirm,
                 type: 'line',
                 data: JSON.parse(confirmStr)
             },
             {
-                name: '累计治愈',
+                name: heal,
                 type: 'line',
                 data: JSON.parse(healStr)
             },
             {
-                name: '累计死亡',
+                name: dead,
                 type: 'line',
                 data: JSON.parse(deadStr)
             },
             {
-                name: '新增趋势',
+                name: addConfirm,
                 type: 'line',
                 data: JSON.parse(confirmAddStr)
             }
@@ -94,6 +99,8 @@
 
     var confirmData = [[${confirmMap}]];
     var nowConfirmData = [[${nowConfirmMap}]];
+    var mapConfirm = [[#{map.confirm}]];
+    var mapNowConfirm = [[#{map.nowConfirm}]];
 
     mapOption = {
         title:{
@@ -105,7 +112,7 @@
         legend:{
             left: 'left',
             top: '6%',
-            data: ['累计确诊', '现有确诊'],
+            data: [mapConfirm,mapNowConfirm],
             selected:{
                 '累计确诊':false,
                 '现有确诊':true

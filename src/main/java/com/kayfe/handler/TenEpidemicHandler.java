@@ -30,10 +30,11 @@ public class TenEpidemicHandler {
     //该注解修饰的方法会在，项目启动时执行一次
     @PostConstruct
     public void dataInit(){
-        List<DataBean> beans = list().get("province");
+        Map<String,ArrayList> map = list();
+        List<DataBean> beans = map.get("province");
         service.remove(null);
         service.saveBatch(beans);
-        List<City> cities = list().get("city");
+        List<City> cities = map.get("city");
         cityService.remove(null);
         cityService.saveBatch(cities);
     }
@@ -45,10 +46,11 @@ public class TenEpidemicHandler {
     //每天12点执行
     @Scheduled(cron = "0 0 12 * * ?")
     public void updateData(){
-        List<DataBean> list = list().get("province");
+        Map<String,ArrayList> map = list();
+        List<DataBean> list = map.get("province");
         service.remove(null);
         service.saveBatch(list);
-        List<City> cities = list().get("city");
+        List<City> cities = map.get("city");
         cityService.remove(null);
         cityService.saveBatch(cities);
     }

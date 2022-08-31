@@ -6,4 +6,7 @@
 
 CreateTableSQLaboutEpidemic.sql是此项目的建库建表语句
 
+TenEpidemicHandler类用于处理从腾讯实时疫情网站获取的json数据
+GraphHandler类用于处理折线图所需数据并返回整理后的数据
+
 本项目只是一个练手学习的Java项目，主要使用的框架有SpringBoot,Spring,SpringMVC,Mybatis-plus，前后端交互连接使用的是Thymeleaf，前端使用了BootStrap以及echarts

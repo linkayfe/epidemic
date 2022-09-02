@@ -3,12 +3,14 @@ package com.kayfe.handler;
 import com.google.gson.Gson;
 import com.kayfe.bean.City;
 import com.kayfe.bean.DataBean;
+import com.kayfe.redis.EpidemicRedis;
 import com.kayfe.service.CityService;
 import com.kayfe.service.TestService;
 import com.kayfe.util.GetDataByUrl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import redis.clients.jedis.Jedis;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -21,6 +23,7 @@ public class TenEpidemicHandler {
 
     private static final String EPIDEMIC_URL =
             "https://api.inews.qq.com/newsqa/v1/query/inner/publish/modules/list?modules=statisGradeCityDetail,diseaseh5Shelf";
+    private static final Jedis jedis = EpidemicRedis.getJedis();
 
     @Autowired
     private TestService service;
@@ -53,6 +56,8 @@ public class TenEpidemicHandler {
         List<City> cities = map.get("city");
         cityService.remove(null);
         cityService.saveBatch(cities);
+        jedis.select(0);
+        jedis.flushDB();
     }
 
     private static Map<String,ArrayList> list(){

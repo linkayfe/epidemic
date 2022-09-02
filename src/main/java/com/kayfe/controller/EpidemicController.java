@@ -41,28 +41,6 @@ public class EpidemicController {
 
         //获取折线图所需数据
         graphBeanHandle(model);
-//        List<String> dateList = graphMap.get("date");
-//        List<Integer> confirmList = graphMap.get("confirm");
-//        List<Integer> healList = graphMap.get("heal");
-//        List<Integer> deadList = graphMap.get("dead");
-//        List<Integer> confirmAddList = graphMap.get("confirmAdd");
-//        model.addAttribute("dateList",new Gson().toJson(dateList));
-//        model.addAttribute("confirmList",new Gson().toJson(confirmList));
-//        model.addAttribute("healList",new Gson().toJson(healList));
-//        model.addAttribute("deadList",new Gson().toJson(deadList));
-//        model.addAttribute("confirmAddList",new Gson().toJson(confirmAddList));
-//
-//        List<OutsideImportBean> outBeans = OutsideImportHandler.getData();
-//        Collections.sort(outBeans);
-//        ArrayList<String> provinces = new ArrayList<>();
-//        ArrayList<Integer> outsides = new ArrayList<>();
-//        for (int i=0;i<outBeans.size();i++){
-//            OutsideImportBean bean = outBeans.get(i);
-//            provinces.add(bean.getProvince());
-//            outsides.add(bean.getConfirm());
-//        }
-//        model.addAttribute("provinces",new Gson().toJson(provinces));
-//        model.addAttribute("outsides",new Gson().toJson(outsides));
         return "graph";
     }
 

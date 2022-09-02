@@ -85,7 +85,7 @@ public class GraphHandler {
 
     private static Long getTime(){
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY,10);
+        calendar.set(Calendar.HOUR_OF_DAY,12);
         calendar.set(Calendar.MINUTE,0);
         calendar.set(Calendar.SECOND,0);
         Long tenClock = calendar.getTimeInMillis();
